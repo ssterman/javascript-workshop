@@ -1,0 +1,44 @@
+<!-- Fetch and display an image from the Pixabay API -->
+
+<!DOCTYPE html>
+<html>
+	<body>
+
+		<h2>Workshop Webpage</h2>
+		<button onClick=update()> click me </button>
+
+		<!-- Add an image element -->
+		<img id='image'/>
+
+		<script>
+			// Update this to be your own API key
+			const APIKEY = *your api key goes here*;
+			// Update this to the search term you want to use; separate words with a +
+			const QUERY = 'blue+birds';
+
+			function update () {
+				console.log('onclick update');
+				// get the info from the API using a URL with your key, query, and any other parameters you want to use
+				fetch('https://pixabay.com/api/?key=' + APIKEY + '&q=' + QUERY + '&image_type=photo')
+					  .then((response) => {
+					  	// wait for the API to respond, then return the response as JSON
+					  	console.log('response: ', response);
+					  	return response.json();
+					  })
+					  .then((data) => {
+					  	console.log(data);
+					  	// choose a random result from the first 20 returned
+					  	var index = Math.floor(Math.random()*20);
+					  	// get the url from that result
+					  	var url = data.hits[index].webformatURL;
+					  	// set the image element to use that new url
+						document.getElementById('image').src = url;						  	
+				});
+				var newColor = Math.floor(Math.random()*16777215).toString(16);  //pick a random color in the range #000000 to #FFFFFF
+				document.body.style.backgroundColor = "#" + newColor;  // set the background color
+			}
+
+		</script>
+
+	</body>
+</html> 

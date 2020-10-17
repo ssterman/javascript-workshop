@@ -1,0 +1,24 @@
+<!-- Add interactiviity - set the background to a random color when a button is clicked -->
+<!-- This file has a bug!!  Why won't the background change color?  Use the debugger to find out.  -->
+
+<!DOCTYPE html>
+<html>
+	<body>
+
+		<h2>Workshop Webpage</h2>
+		
+		<button onClick=update()> click me </button>
+
+		<script>
+			
+			//javascript function that is called by the onClick handler for the button
+			function update () {
+				console.log('onclick update');
+				var newColor = (Math.random()*16777215).toString(16);  //pick a random color in the range #000000 to #FFFFFF
+				document.body.style.backgroundColor = "#" + newColor;  // set the background color
+			}
+
+		</script>
+
+	</body>
+</html> 

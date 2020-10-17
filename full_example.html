@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- Add a reference to the ColorThief library -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js" crossOrigin="anonymous"></script>
+	<!-- Add a stylesheet for extra formatting capability -->
+	<link rel="stylesheet" type="text/css" href="workshop.css">
+</head>
+<body>
+
+<h2>Workshop Webpage</h2>
+<button onClick=update()> click me </button>
+
+<div id='image_wrapper'> 
+	<img id='image'/> 
+</div>
+
+<script>
+	// Update this to be your own API key
+	const APIKEY = *your api key goes here*;
+	// Update this to the search term you want to use; separate words with a +
+	const QUERY = 'blue+birds';
+
+	function update () {
+		console.log('onclick update');
+		// get the info from the API using a URL with your key, query, and any other parameters you want to use
+		fetch('https://pixabay.com/api/?key=' + APIKEY + '&q=' + QUERY + '&image_type=photo')
+			  .then((response) => {
+			  	// wait for the API to respond, then return the response as JSON
+			  	console.log('response: ', response);
+			  	return response.json();
+			  })
+			  .then((data) => {
+			  	console.log(data);
+			  	// choose a random result from the first 20 returned
+			  	var index = Math.floor(Math.random()*20);
+			  	// get the url from that result
+			  	var url = data.hits[index].webformatURL;
+			  	// set the image element to use that new url
+				document.getElementById('image').src = url;			
+				
+
+				// set up the ColorThief library
+				const colorThief = new ColorThief();
+
+			    const img = new Image();
+			    img.setAttribute("src", url);
+			    img.crossOrigin = "Anonymous"; // need this to get around CORS security
+
+			    var color = [];
+
+			    // Make sure image is finished loading
+			    if (img.complete) {
+			      color = colorThief.getColor(img);
+			      document.body.style.backgroundColor = rgbToHex(color[0], color[1], color[2]);
+			    } else {
+			    	// if the image isn't done loading, wait for it
+			      	img.addEventListener('load', function() {
+			        color = colorThief.getColor(img);
+					document.body.style.backgroundColor = rgbToHex(color[0], color[1], color[2]);
+			      });
+			    }			  	
+		});
+	}
+
+	// https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+	function rgbToHex(r, g, b) {
+	  return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+	}
+
+</script>
+
+</body>
+</html> 
